@@ -6,6 +6,7 @@ RwSimpleNestedProjectLoadComponentV2 {
 	#packageNames : [
 		'BaselineOfNeoCSV',
 		'ConfigurationOfNeoCSV',
+		'Neo-CSV-Pharo',
 		'Neo-CSV-Magritte'
 	],
 	#comment : ''
