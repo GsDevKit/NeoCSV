@@ -1,0 +1,12 @@
+RwSimpleNestedProjectLoadComponentV2 {
+	#name : 'pharo/pharo',
+	#condition : 'pharo',
+	#projectNames : [ ],
+	#componentNames : [ ],
+	#packageNames : [
+		'BaselineOfNeoCSV',
+		'ConfigurationOfNeoCSV',
+		'Neo-CSV-Magritte'
+	],
+	#comment : ''
+}

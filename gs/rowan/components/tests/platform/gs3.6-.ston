@@ -1,0 +1,10 @@
+RwPlatformNestedProjectLoadComponentV2 {
+	#name : 'tests/platform/gs3.6-',
+	#condition : [
+		'gs3.[6-]'
+	],
+	#packageNames : [
+		'Neo-CSV-GemStone36--Tests'
+	],
+	#comment : ''
+}

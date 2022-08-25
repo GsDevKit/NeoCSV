@@ -3,12 +3,12 @@ I am NeoCSVReaderTests, a suite of unit tests for NeoCSVReader.
 
 "
 Class {
-	#name : #NeoCSVReaderTests,
-	#superclass : #TestCase,
+	#name : 'NeoCSVReaderTests',
+	#superclass : 'TestCase',
 	#category : 'Neo-CSV-Tests'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testAvailableAndDefinedFieldsMismatch [
 	| input |
 	input := 'foo,1\bar,2\foobar,3' withCRs.
@@ -57,7 +57,7 @@ NeoCSVReaderTests >> testAvailableAndDefinedFieldsMismatch [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testConversionErrors [
 	self 
 		should: [ (NeoCSVReader on: 'a' readStream) addIntegerField; upToEnd ]
@@ -67,14 +67,14 @@ NeoCSVReaderTests >> testConversionErrors [
 		raise: Error.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmbeddedQuotes [
 	self 
 		assert: (NeoCSVReader on: '1,"x""y""z",3' readStream) upToEnd
 		equals: #(('1' 'x"y"z' '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyConversions [
 	| input |
 	input := (String crlf join: #( '1,2.5,foo' ',,' )).
@@ -89,7 +89,7 @@ NeoCSVReaderTests >> testEmptyConversions [
 					#( nil nil nil ) }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyConversionsTestObject [
 	| input |
 	input := (String crlf join: #( '1,2.5,foo' ',,' )).
@@ -105,35 +105,35 @@ NeoCSVReaderTests >> testEmptyConversionsTestObject [
 					NeoCSVTestObject new }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldQuoted [
 	self 
 		assert: (NeoCSVReader on: '"1",,"3"' readStream) upToEnd
 		equals: #(('1' nil '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldSecondRecordQuoted [
 	self 
 		assert: (NeoCSVReader on: '"foo","bar"\"100",' withCRs readStream) upToEnd
 		equals: #(('foo' 'bar')('100' nil))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldSecondRecordUnquoted [
 	self 
 		assert: (NeoCSVReader on: 'foo,bar\100,' withCRs readStream) upToEnd
 		equals: #(('foo' 'bar')('100' nil))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldUnquoted [
 	self 
 		assert: (NeoCSVReader on: '1,,3' readStream) upToEnd
 		equals: #(('1' nil '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldValue [
 	self 
 		assert: ((NeoCSVReader on: '"1",,3,"","5"' readStream) 
@@ -152,7 +152,7 @@ NeoCSVReaderTests >> testEmptyFieldValue [
 		equals: #(('a' 'b' 'c')(empty empty empty)(empty empty empty)('1' '2' '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyFieldValuePassNil [
 	| date1 date2 |
 	date1 := '1900-01-01' asDate.
@@ -172,21 +172,21 @@ NeoCSVReaderTests >> testEmptyFieldValuePassNil [
 							with: (Array with: date1 with: date2)).
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyLastFieldQuoted [
 	self 
 		assert: (NeoCSVReader on: '"1","2",""' readStream) upToEnd
 		equals: #(('1' '2' nil))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEmptyLastFieldUnquoted [
 	self 
 		assert: (NeoCSVReader on: '1,2,' readStream) upToEnd
 		equals: #(('1' '2' nil))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testEnumerating [
 	| numbers csv |
 	numbers := (1 to: 10) collect: [ :each | { each asString. each asWords } ].
@@ -203,42 +203,42 @@ NeoCSVReaderTests >> testEnumerating [
 							reject: [ :each | each first odd ])
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testOneLineEmpty [
 	self 
 		assert: (NeoCSVReader on: '' readStream) upToEnd
 		equals: #()
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testOneLineOneFieldQuoted [
 	self 
 		assert: (NeoCSVReader on: '"1"' readStream) upToEnd
 		equals: #(('1'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testOneLineOneFieldUnquoted [
 	self 
 		assert: (NeoCSVReader on: '1' readStream) upToEnd
 		equals: #(('1'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testOneLineQuoted [
 	self 
 		assert: (NeoCSVReader on: '"1","2","3"' readStream) upToEnd
 		equals: #(('1' '2' '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testOneLineUnquoted [
 	self 
 		assert: (NeoCSVReader on: '1,2,3' readStream) upToEnd
 		equals: #(('1' '2' '3'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadAsByteArrays [
 	| input |
 	input := (String crlf join: #( '1,2,3' '1,2,3' '1,2,3' '')).
@@ -255,7 +255,7 @@ NeoCSVReaderTests >> testReadAsByteArrays [
 			#[1 2 3].}
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadAsIntegerArrays [
 	| input |
 	input := (String crlf join: #( '100,200,300' '100,200,300' '100,200,300' '')).
@@ -272,7 +272,7 @@ NeoCSVReaderTests >> testReadAsIntegerArrays [
 			#(100 200 300) asIntegerArray }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadDictionaries [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -290,7 +290,7 @@ NeoCSVReaderTests >> testReadDictionaries [
 					Dictionary newFromPairs: #(x 100 y 200 z 300) }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadFloatsRadixPointComma [
 	| input output |
 	input := (String lf join: #( '"x";"y";"z"' '10,0;20,123;-30,5' '10,0;20,123;-30,5' '10,0;20,123;-30,5' '')).
@@ -302,11 +302,12 @@ NeoCSVReaderTests >> testReadFloatsRadixPointComma [
 		addFloatFieldRadixPointComma;
 		upToEnd.
 	output do: [ :record |
-		#(10.0 20.123 -30.5) with: record do: [ :x :y | 
-			self assert: (x closeTo: y) ] ]
+		#(10.0 20.123 -30.5)
+			with: record
+			do: [ :x :y | self assert: x equals: y ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadHeader [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -315,7 +316,7 @@ NeoCSVReaderTests >> testReadHeader [
 		equals: #('x' 'y' 'z')
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadIntegers [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -329,7 +330,7 @@ NeoCSVReaderTests >> testReadIntegers [
 		equals: #((100 200 300)(100 200 300)(100 200 300))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadIntegersReadingHeaderAfterFieldDefinitions [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -343,7 +344,7 @@ NeoCSVReaderTests >> testReadIntegersReadingHeaderAfterFieldDefinitions [
 		equals: #((100 200 300)(100 200 300)(100 200 300))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadTestsObjects [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -361,7 +362,7 @@ NeoCSVReaderTests >> testReadTestsObjects [
 					NeoCSVTestObject example }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadTestsObjectsUsingBlockAccessors [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '100,200,300' '100,200,300' '')).
@@ -379,7 +380,7 @@ NeoCSVReaderTests >> testReadTestsObjectsUsingBlockAccessors [
 					NeoCSVTestObject example }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadTestsObjectsWithEmptyFieldValue [
 	| input |
 	input := (String crlf join: #( '"x","y","z"' '100,200,300' '1,,3' '100,200,300' '')).
@@ -410,7 +411,7 @@ NeoCSVReaderTests >> testReadTestsObjectsWithEmptyFieldValue [
 					NeoCSVTestObject2 example }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadTestsObjectsWithIgnoredField [
 	| input |
 	input := (String crlf join: #( '"x","y",''-'',"z"' '100,200,a,300' '100,200,b,300' '100,200,c,300' '')).
@@ -429,7 +430,7 @@ NeoCSVReaderTests >> testReadTestsObjectsWithIgnoredField [
 					NeoCSVTestObject example }
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testReadWithIgnoredField [
 	| input |
 	input := (String crlf join: #( '1,2,a,3' '1,2,b,3' '1,2,c,3' '')).
@@ -446,7 +447,7 @@ NeoCSVReaderTests >> testReadWithIgnoredField [
 			#(1 2 3).}
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleCrLfQuoted [
 	| input |
 	input := (String crlf join: #('"1","2","3"' '"4","5","6"' '"7","8","9"' '')).
@@ -455,7 +456,7 @@ NeoCSVReaderTests >> testSimpleCrLfQuoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleCrLfUnquoted [
 	| input |
 	input := (String crlf join: #('1,2,3' '4,5,6' '7,8,9' '')).
@@ -464,7 +465,7 @@ NeoCSVReaderTests >> testSimpleCrLfUnquoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleCrQuoted [
 	| input |
 	input := (String cr join: #('"1","2","3"' '"4","5","6"' '"7","8","9"' '')).
@@ -473,7 +474,7 @@ NeoCSVReaderTests >> testSimpleCrQuoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleCrUnquoted [
 	| input |
 	input := (String cr join: #('1,2,3' '4,5,6' '7,8,9' '')).
@@ -482,7 +483,7 @@ NeoCSVReaderTests >> testSimpleCrUnquoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleLfQuoted [
 	| input |
 	input := (String lf join: #('"1","2","3"' '"4","5","6"' '"7","8","9"' '')).
@@ -491,7 +492,7 @@ NeoCSVReaderTests >> testSimpleLfQuoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleLfUnquoted [
 	| input |
 	input := (String lf join: #('1,2,3' '4,5,6' '7,8,9' '')).
@@ -500,7 +501,7 @@ NeoCSVReaderTests >> testSimpleLfUnquoted [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleSemiColonDelimited [
 	| input |
 	input := (String crlf join: #('1;2;3' '4;5;6' '7;8;9' '')).
@@ -511,7 +512,7 @@ NeoCSVReaderTests >> testSimpleSemiColonDelimited [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSimpleTabDelimited [
 	| input |
 	input := (String crlf join: #('1	2	3' '4	5	6' '7	8	9' '')).
@@ -522,7 +523,7 @@ NeoCSVReaderTests >> testSimpleTabDelimited [
 		equals: #(('1' '2' '3')('4' '5' '6')('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSkipping [
 	| reader |
 	reader := NeoCSVReader on: 'A,1\B,2\C,3\D,4\E,5\F,6' withCRs readStream.
@@ -546,7 +547,7 @@ NeoCSVReaderTests >> testSkipping [
 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSkippingEmptyRecords [
 	| input output |
 	input := '1,2,3\\4,5,6\,,\7,8,9' withCRs.
@@ -559,7 +560,7 @@ NeoCSVReaderTests >> testSkippingEmptyRecords [
 	self assert: output equals: #(#('1' '2' '3') #('4' '5' '6') #('7' '8' '9'))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testSkippingSpecial [
 	| reader |
 	reader := NeoCSVReader on: 'A,1\B,\,3\,\\F,6' withCRs readStream.
@@ -573,7 +574,7 @@ NeoCSVReaderTests >> testSkippingSpecial [
 	self assert: reader atEnd.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoCSVReaderTests >> testStrictParsing [
 	{
 		'foo,1\bar,2\foobar,3' -> [ :reader | reader addField ]. 

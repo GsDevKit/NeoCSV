@@ -29,18 +29,18 @@ I accept the following syntax:
 where digit depends on the base (2 to 36), 0 .. 9, A-Z, a-z.
 "
 Class {
-	#name : #NeoNumberParser,
-	#superclass : #Object,
+	#name : 'NeoNumberParser',
+	#superclass : 'Object',
 	#instVars : [
 		'stream',
 		'base',
 		'radixPoint',
 		'digitGroupSeparator'
 	],
-	#category : #'Neo-CSV-Core'
+	#category : 'Neo-CSV-Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 NeoNumberParser class >> on: stringOrStream [
 	| stream |
 	stream := stringOrStream isString
@@ -51,47 +51,48 @@ NeoNumberParser class >> on: stringOrStream [
 		yourself
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 NeoNumberParser class >> parse: stringOrStream [
 	^ (self on: stringOrStream) next
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 NeoNumberParser class >> parse: stringOrStream base: base [
 	^ (self on: stringOrStream)
 		base: base;
 		next
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 NeoNumberParser class >> parse: stringOrStream base: base ifFail: block [
 	^ [ self parse: stringOrStream base: base ]
 		on: Error
 		do: block
 ]
 
-{ #category : #queries }
+{ #category : 'queries' }
 NeoNumberParser class >> parse: stringOrStream ifFail: block [
 	^ [ self parse: stringOrStream ]
 		on: Error
 		do: block
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 NeoNumberParser >> atEnd [
 	^ stream atEnd
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoNumberParser >> base: integer [
 	"Set the base of the numbers that I parse to integer.
 	The default is 10"
-	
-	self assert: (integer between: 2 and: 36) description: 'Number base must be between 2 and 36'.
+
+	(integer between: 2 and: 36)
+		ifFalse: [ ^ self error: 'Number base must be between 2 and 36' ].
 	base := integer
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> consumeWhitespace [
 	"Strip whitespaces from the input stream."
 
@@ -100,7 +101,7 @@ NeoNumberParser >> consumeWhitespace [
 
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoNumberParser >> digitGroupSeparator: separatorCharacter [
 	"Set the digit group separator to separatorCharacter.
 	The are skipped while parsing digit characters.
@@ -109,61 +110,67 @@ NeoNumberParser >> digitGroupSeparator: separatorCharacter [
 	digitGroupSeparator := separatorCharacter 
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> digitsDo: oneArgumentBlock [
 	"Evaluate oneArgumentBlock with integer digit values from the input stream,
-	while the stream is not at end and the digit value is within [0, base).
-	Skip digit group separator characters."
-	
-	| character digitValue |
+	 while the stream is not at end and the digit value is within [0, base).
+	 Skip digit group separator characters."
+
+	| character |
 	[ (character := stream peek) notNil ]
 		whileTrue: [ 
 			character = digitGroupSeparator
 				ifFalse: [ 
-					((digitValue := character digitValue) >= 0 and: [ digitValue < base ])
-						ifTrue: [ oneArgumentBlock value: digitValue ]
-						ifFalse: [ ^ self ] ].
+					(self digitValueOf: character)
+						ifNil: [ ^ self ]
+						ifNotNil: [ :digitValue | oneArgumentBlock value: digitValue ] ].
 			stream next ]
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> failIfNotAtEnd [
 	self atEnd
 		ifFalse: [ self error: 'extraneous input detected' ]
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoNumberParser >> initialize [
 	super initialize.
 	self base: 10.
 	self radixPoint: $.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 NeoNumberParser >> next [
 	^ self parseNumber
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoNumberParser >> on: readStream [
 	stream := readStream 
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> parseNumber [
-	| negated number |
+	"Use integer fraction arithmetic right down to the last to avoid intermediate rounding errors."
+
+	| negated number hasRadixPoint hasExponent |
 	negated := stream peekFor: $-.
 	number := self parseNumberInteger.
-	(stream peekFor: radixPoint)
+	hasRadixPoint := stream peekFor: radixPoint.
+	hasRadixPoint
 		ifTrue: [ number := number + self parseNumberFraction ].
-	((stream peekFor: $e) or: [ stream peekFor: $E ])
+	hasExponent := (stream peekFor: $e) or: [ stream peekFor: $E ].
+	hasExponent
 		ifTrue: [ number := number * self parseNumberExponent ].
 	negated
 		ifTrue: [ number := number negated ].
-	^ number
+	^ hasRadixPoint | hasExponent
+		ifTrue: [number asFloat]
+		ifFalse: [number]
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> parseNumberExponent [
 	| number negated |
 	number := 0.
@@ -176,18 +183,20 @@ NeoNumberParser >> parseNumberExponent [
 	^ base raisedTo: number
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> parseNumberFraction [
+	"Answer a pure fraction saving coversion to float until the last step."
+
 	| number power |
 	number := 0.
-	power := 1.0.
+	power := 1.
 	self digitsDo: [ :x | 
 		number := base * number + x.
 		power := power * base ].
 	^ number / power
 ]
 
-{ #category : #parsing }
+{ #category : 'parsing' }
 NeoNumberParser >> parseNumberInteger [
 	| number found |
 	number := 0.
@@ -200,7 +209,7 @@ NeoNumberParser >> parseNumberInteger [
 	^ number
 ]
 
-{ #category : #'initialize-release' }
+{ #category : 'initialize-release' }
 NeoNumberParser >> radixPoint: radixCharacter [
 	"Set the radix of the numbers that I parse to radixCharacter.
 	The default is $."
