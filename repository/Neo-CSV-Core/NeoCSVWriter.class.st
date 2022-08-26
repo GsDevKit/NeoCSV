@@ -259,7 +259,8 @@ NeoCSVWriter >> lineEndConvention: symbol [
 	"Set the end of line convention to be used.
 	Either #cr, #lf or #crlf (the default)."
 	
-	self assert: (#(cr lf crlf) includes: symbol).
+	(#(cr lf crlf) includes: symbol)
+		ifFalse: [^self error: symbol printString, ' is not a valid line end convention (#cr, #lf, or #crlf)'].
 	lineEnd := String perform: symbol
 ]
 
@@ -307,8 +308,9 @@ NeoCSVWriter >> on: aWriteStream [
 NeoCSVWriter >> separator: character [
 	"Set character to be used as separator"
 	
-	self assert: character isCharacter.
-	separator := character 
+	character isCharacter
+		ifFalse: [^self error: character printString , ' is not a valid separator character'].
+	separator := character
 ]
 
 { #category : 'private' }
